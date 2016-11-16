@@ -11,6 +11,8 @@ import br.com.sematec.carrinho.modelo.Usuario;
 
 public class ItemDAO {
 
+	private final static Map<Usuario, Map<String, Item>> ITENS = new HashMap<Usuario, Map<String, Item>>();
+
 	private void geraIdEAdiciona(Usuario u, Item it) {
 		List<Item> its = CarrinhoDAO.getCarrinhos().get(u).getItens();
 		boolean novoProd = true;
@@ -23,16 +25,15 @@ public class ItemDAO {
 		}
 
 		if (novoProd) {
-			String id = String.valueOf(ITENS.get(u) == null ? 1 : ITENS.get(u).size() + 1);
+			String id = String.valueOf(it.getProduto().getId());
 			it.setId(id);
 			it.setTotal(it.getProduto().getPreco().multiply(new BigDecimal(it.getQuantidade())));
 
-			
 			if (ITENS.get(u) == null) {
 				Map<String, Item> map = new HashMap<String, Item>();
 				map.put(id, it);
 				ITENS.put(u, map);
-			}else{
+			} else {
 				Map<String, Item> map = ITENS.get(u);
 				map.put(id, it);
 				ITENS.put(u, map);
@@ -40,8 +41,6 @@ public class ItemDAO {
 
 		}
 	}
-
-	private final static Map<Usuario, Map<String, Item>> ITENS = new HashMap<Usuario, Map<String, Item>>();
 
 	public void adiciona(Usuario u, Item i) {
 		geraIdEAdiciona(u, i);

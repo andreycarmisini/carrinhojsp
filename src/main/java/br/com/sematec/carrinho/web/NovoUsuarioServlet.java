@@ -26,24 +26,35 @@ public class NovoUsuarioServlet extends HttpServlet {
 	@Override
 	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, java.io.IOException {
 		try {
+			String login = req.getParameter("login");
+			String senha = req.getParameter("senha");
+			String nome = req.getParameter("nome");
+			if (login == null || senha == null || login.isEmpty() || senha.isEmpty() || nome == null
+					|| nome.isEmpty()) {
+				req.setAttribute("erro", "email ou senha inválidos.");
+				String pagina = "/index.jsp";
+				RequestDispatcher dispatcher = req.getRequestDispatcher(pagina);
+				dispatcher.forward(req, resp);
+			}
+
 			HttpSession session = req.getSession(true);
-			Usuario temp = (Usuario)session.getAttribute("usuarioLogado");
-			if (null == temp || !temp.getLogin().equals((String)req.getParameter("login"))) {
+			Usuario temp = (Usuario) session.getAttribute("usuarioLogado");
+			if (null == temp || !temp.getLogin().equals(req.getParameter("login"))) {
 				Usuario usuario = new Usuario();
-				usuario.setLogin(req.getParameter("login"));
-				usuario.setSenha(req.getParameter("senha"));
+				usuario.setLogin(login);
+				usuario.setSenha(senha);
 				usuario = dao.buscaUsuarioPorLoginESenha(usuario);
 				if (usuario == null) {
 					Usuario u = new Usuario();
-					u.setLogin(req.getParameter("login"));
-					u.setSenha(req.getParameter("senha"));
-					u.setNome(req.getParameter("nome"));
+					u.setLogin(login);
+					u.setSenha(senha);
+					u.setNome(nome);
 					dao.adiciona(u);
 					session.setAttribute("usuarioLogado", u);
-					CarrinhoDAO.novoCarrinho(u);//cria o novo carrinho
+					CarrinhoDAO.novoCarrinho(u);// cria o novo carrinho
 					req.setAttribute("produtoList", new ProdutoDAO().lista());
 					req.setAttribute("carrinhoTotal", CarrinhoDAO.getCarrinhos().get(u).getTotal());
-					req.setAttribute("carrinho",  CarrinhoDAO.getCarrinhos().get(u));
+					req.setAttribute("carrinho", CarrinhoDAO.getCarrinhos().get(u));
 					String pagina = "/WEB-INF/jsp/produto/lista.jsp";
 					RequestDispatcher dispatcher = req.getRequestDispatcher(pagina);
 					dispatcher.forward(req, resp);
@@ -53,10 +64,11 @@ public class NovoUsuarioServlet extends HttpServlet {
 					RequestDispatcher dispatcher = req.getRequestDispatcher(pagina);
 					dispatcher.forward(req, resp);
 				}
-			}else{
+			} else {
 				req.setAttribute("produtoList", new ProdutoDAO().lista());
-				req.setAttribute("carrinhoTotal", CarrinhoDAO.getCarrinhos().get((Usuario)session.getAttribute("usuarioLogado")).getTotal());
-				req.setAttribute("carrinho",  CarrinhoDAO.getCarrinhos().get((Usuario)session.getAttribute("usuarioLogado")));
+				req.setAttribute("carrinhoTotal",
+						CarrinhoDAO.getCarrinhos().get(session.getAttribute("usuarioLogado")).getTotal());
+				req.setAttribute("carrinho", CarrinhoDAO.getCarrinhos().get(session.getAttribute("usuarioLogado")));
 				String pagina = "/WEB-INF/jsp/produto/lista.jsp";
 				RequestDispatcher dispatcher = req.getRequestDispatcher(pagina);
 				dispatcher.forward(req, resp);

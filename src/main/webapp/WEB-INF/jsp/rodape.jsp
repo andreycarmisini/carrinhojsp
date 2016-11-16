@@ -4,10 +4,12 @@
 	<hr/>
     <a href="<c:url value="/usuario?funcao=lista" />"><fmt:message key="mensagem.listaUsuarios" /></a>
 <hr/>
+<fmt:message key="mensagem.dataatual" />: <jsp:useBean id="now" class="java.util.Date"/> <fmt:formatDate value="${now}" dateStyle="long"/>
+<hr/>
 <form action="logout" method="post">
 	 <input type="submit" value="Logout" />
 </form>
 <% } %>
 <hr/>
-Carrinho de compras! Andrey
-<hr/>
+<fmt:message key="mensagem.rodape" />
+<hr />

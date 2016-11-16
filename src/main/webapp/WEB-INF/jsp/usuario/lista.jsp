@@ -18,12 +18,14 @@
 	<div id="mensagem"></div>
 	<table width="100%">
 		<tr>
+			<td><fmt:message key="mensagem.contador" /></td>
 			<td width="20%"><fmt:message key="mensagem.nome" /></td>
 			<td><fmt:message key="mensagem.login" /></td>
 			<td><fmt:message key="mensagem.senha" /></td>
 		</tr>
 		<c:forEach var="p" items="${usuarioList}" varStatus="st">
 			<tr id="usuarios${p.id}">
+				<td>${st.count}</td>
 				<td>${p.nome}</td>
 				<td>${p.login}</td>
 				<td>${p.senha}</td>

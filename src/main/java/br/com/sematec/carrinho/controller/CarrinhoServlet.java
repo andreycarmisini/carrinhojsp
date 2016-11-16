@@ -33,32 +33,29 @@ public class CarrinhoServlet extends HttpServlet {
 		case "lista":
 			lista(req, resp);
 			break;
-//		case "add":
-//			adiciona(req, resp);
-//			break;
 		default:
 			LOGGER.warning("função desconhecida:" + funcao);
 			break;
 		}
 	}
-	
+
 	private void lista(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		Usuario u = (Usuario)req.getSession().getAttribute("usuarioLogado"); 
+		Usuario u = (Usuario) req.getSession().getAttribute("usuarioLogado");
 		req.setAttribute("carrinho", CarrinhoDAO.getCarrinhos().get(u));
 		String pagina = "/WEB-INF/jsp/carrinho/lista.jsp";
 		RequestDispatcher dispatcher = req.getRequestDispatcher(pagina);
 		dispatcher.forward(req, resp);
 	}
-	
+
 	private void remove(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		String text;
 		if (req.getParameter("id") != null) {
 			String id = String.valueOf(req.getParameter("id"));
-			Usuario u = (Usuario)req.getSession().getAttribute("usuarioLogado"); 
+			Usuario u = (Usuario) req.getSession().getAttribute("usuarioLogado");
 			for (Item i : CarrinhoDAO.getCarrinhos().get(u).getItens()) {
-				if (i.getId().equals(id)){
-					CarrinhoDAO.remove(u,i);
-					ItemDAO.remove(u,i); 
+				if (i.getId().equals(id)) {
+					CarrinhoDAO.remove(u, i);
+					ItemDAO.remove(u, i);
 					break;
 				}
 			}
@@ -73,6 +70,4 @@ public class CarrinhoServlet extends HttpServlet {
 		resp.getWriter().write(text);
 	}
 
-
-	
 }

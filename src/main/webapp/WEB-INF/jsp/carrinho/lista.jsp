@@ -40,9 +40,9 @@
 					<c:set var="stringNome" value="${fn:toUpperCase(i.getProduto().getNome())}" />
 					<td>${stringNome}</td>
 					<td><img style="height:100px;width:100px;" src="<c:url value="${i.getProduto().getImagem()}"/>" /></td>
-					<td>${i.getProduto().getPreco()}</td>
+					<td><fmt:formatNumber value="${i.getProduto().getPreco()}" type="currency" /></td>
 					<td>${i.getQuantidade()}</td>
-					<td>${i.getTotal()}</td>
+					<td><fmt:formatNumber value="${i.getTotal()}" type="currency" /></td>
 					<td><a href="#" onclick="return removeCarrinho(${i.getId()})">Remover</a></td>
 				</tr>
 			</c:forEach>
